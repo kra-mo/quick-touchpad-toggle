@@ -41,7 +41,7 @@ class Indicator extends PanelMenu.Button {
             style_class: 'system-status-icon',
         }));
 
-        let item = new PopupMenu.PopupMenuItem(_('Toogle Touchpad'));
+        let item = new PopupMenu.PopupMenuItem(_('Toggle Touchpad'));
         item.connect('activate', () => {
             this.schema.set_boolean('disable-while-typing', !this.schema.get_boolean('disable-while-typing'));
         });
