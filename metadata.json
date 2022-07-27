@@ -1,0 +1,8 @@
+{
+  "name": "Toggle Touchpad",
+  "description": "Toggles the setting to disable the touchpad",
+  "uuid": "toggletouchpad@kramo.hu",
+  "shell-version": [
+    "42"
+  ]
+}
