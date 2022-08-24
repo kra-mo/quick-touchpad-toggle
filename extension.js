@@ -1,4 +1,4 @@
-/* extension.js
+/* Toggle Touchpad GNOME Shell Extension
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,16 +16,13 @@
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-/* exported init */
-
-const GETTEXT_DOMAIN = 'my-indicator-extension';
+const GETTEXT_DOMAIN = 'toggletouchpad';
 
 const { Gio, GObject, St } = imports.gi;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
-const PopupMenu = imports.ui.popupMenu;
 
 const _ = ExtensionUtils.gettext;
 
@@ -34,18 +31,33 @@ class Indicator extends PanelMenu.Button {
     _init() {
         super._init(0.0, _('Touchpad Indicator'));
 
+        this.icon = new St.Icon({style_class: 'system-status-icon'});
         this.schema = Gio.Settings.new('org.gnome.desktop.peripherals.touchpad');
-
-        this.add_child(new St.Icon({
-            icon_name: 'input-touchpad-symbolic',
-            style_class: 'system-status-icon',
-        }));
-
-        let item = new PopupMenu.PopupMenuItem(_('Toggle Touchpad'));
-        item.connect('activate', () => {
+        
+        switch(this.schema.get_boolean('disable-while-typing')) {
+            case true:
+                this.icon.icon_name = 'touchpad-disabled-symbolic';
+            break;
+            case false:
+                this.icon.icon_name = 'input-touchpad-symbolic';
+            break;
+        }
+        
+        this.add_child(this.icon)
+        
+        this.connect('button-release-event', () => {
             this.schema.set_boolean('disable-while-typing', !this.schema.get_boolean('disable-while-typing'));
+            switch(this.schema.get_boolean('disable-while-typing')) {
+                case true:
+                    this.icon.icon_name = 'touchpad-disabled-symbolic';
+                    Main.notify('Touchpad disabled');
+                break;
+                case false:
+                    this.icon.icon_name = 'input-touchpad-symbolic';
+                    Main.notify('Touchpad enabled');
+                break;
+            }
         });
-        this.menu.addMenuItem(item);
     }
 });
 
