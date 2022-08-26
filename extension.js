@@ -1,4 +1,4 @@
-/* Toggle Touchpad GNOME Shell Extension
+/* Quick Touchpad Toggle GNOME Shell Extension
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
