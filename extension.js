@@ -18,7 +18,6 @@
 
 const { Gio, GObject, St } = imports.gi;
 
-const ExtensionUtils = imports.misc.extensionUtils;
 const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
 
