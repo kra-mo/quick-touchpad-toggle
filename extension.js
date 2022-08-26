@@ -46,11 +46,11 @@ class Indicator extends PanelMenu.Button {
             switch(this.schema.get_boolean('disable-while-typing')) {
                 case true:
                     this.icon.icon_name = 'touchpad-disabled-symbolic';
-                    Main.notify('Touchpad disabled');
+                    Main.notify('Touchpad disabled while typing');
                 break;
                 case false:
                     this.icon.icon_name = 'input-touchpad-symbolic';
-                    Main.notify('Touchpad enabled');
+                    Main.notify('Touchpad enabled while typing');
                 break;
             }
         });
