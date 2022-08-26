@@ -1,7 +1,7 @@
 {
-    "uuid": "toggletouchpad@kramo.hu",
-    "name": "Toggle Touchpad",
-    "description": "Toggle the setting to disable the touchpad.",
+    "uuid": "quick-touchpad-toggle@kramo.hu",
+    "name": "Quick Touchpad Toggle",
+    "description": "Toggle the \"disable touchpad while typing\" setting more easily.",
     "shell-version": [ "42" ],
     "url": "https://github.com/kra-mo/toggle-touchpad",
     "version": 2
