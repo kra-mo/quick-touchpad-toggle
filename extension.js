@@ -16,15 +16,11 @@
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-const GETTEXT_DOMAIN = 'toggletouchpad';
-
 const { Gio, GObject, St } = imports.gi;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
-
-const _ = ExtensionUtils.gettext;
 
 const Indicator = GObject.registerClass(
 class Indicator extends PanelMenu.Button {
@@ -64,8 +60,6 @@ class Indicator extends PanelMenu.Button {
 class Extension {
     constructor(uuid) {
         this._uuid = uuid;
-
-        ExtensionUtils.initTranslations(GETTEXT_DOMAIN);
     }
 
     enable() {
