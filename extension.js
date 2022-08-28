@@ -16,7 +16,7 @@
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-const { Gio, GObject, St } = imports.gi;
+const {Gio, GObject, St} = imports.gi;
 
 const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
@@ -28,28 +28,28 @@ class Indicator extends PanelMenu.Button {
 
         this.icon = new St.Icon({style_class: 'system-status-icon'});
         this.schema = Gio.Settings.new('org.gnome.desktop.peripherals.touchpad');
-        
-        switch(this.schema.get_boolean('disable-while-typing')) {
-            case true:
-                this.icon.icon_name = 'touchpad-disabled-symbolic';
+
+        switch (this.schema.get_boolean('disable-while-typing')) {
+        case true:
+            this.icon.icon_name = 'touchpad-disabled-symbolic';
             break;
-            case false:
-                this.icon.icon_name = 'input-touchpad-symbolic';
+        case false:
+            this.icon.icon_name = 'input-touchpad-symbolic';
             break;
         }
-        
-        this.add_child(this.icon)
-        
+
+        this.add_child(this.icon);
+
         this.connect('button-release-event', () => {
             this.schema.set_boolean('disable-while-typing', !this.schema.get_boolean('disable-while-typing'));
-            switch(this.schema.get_boolean('disable-while-typing')) {
-                case true:
-                    this.icon.icon_name = 'touchpad-disabled-symbolic';
-                    Main.notify('Touchpad disabled while typing');
+            switch (this.schema.get_boolean('disable-while-typing')) {
+            case true:
+                this.icon.icon_name = 'touchpad-disabled-symbolic';
+                Main.notify('Touchpad disabled while typing');
                 break;
-                case false:
-                    this.icon.icon_name = 'input-touchpad-symbolic';
-                    Main.notify('Touchpad enabled while typing');
+            case false:
+                this.icon.icon_name = 'input-touchpad-symbolic';
+                Main.notify('Touchpad enabled while typing');
                 break;
             }
         });
