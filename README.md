@@ -1,7 +1,7 @@
 # Quick Touchpad Toggle
 A GNOME Shell Extension to more easily toggle the "disable touchpad while typing" setting.
 
-Currently GNOME Shell version 42 is supported.
+GNOME Shell versions 40, 41 and 42 are supported.
 
 ## Installation
 The extension can be installed [directly from the GNOME Extensions website](https://extensions.gnome.org/extension/5292/quick-touchpad-toggle/).
