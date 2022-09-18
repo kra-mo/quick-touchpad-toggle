@@ -37,7 +37,7 @@ class FeatureToggle extends QuickSettings.QuickToggle {
 
         this._iconName();
 
-        this.connect('clicked', () => {
+        this._settings.connect('changed::disable-while-typing', () => {
             this._iconName();
         });
     }
@@ -60,7 +60,7 @@ class FeatureIndicator extends QuickSettings.SystemIndicator {
         super._init();
 
         this._indicator = this._addIndicator();
-        this._indicator.icon_name = 'input-touchpad-symbolic';
+        this._indicator.iconName = 'input-touchpad-symbolic';
 
         this._settings = new Gio.Settings({schema_id: 'org.gnome.desktop.peripherals.touchpad'});
 
