@@ -24,41 +24,44 @@ const PanelMenu = imports.ui.panelMenu;
 const Indicator = GObject.registerClass(
 class Indicator extends PanelMenu.Button {
     _init() {
-        super._init(0.0, _('Touchpad Indicator'));
+        super._init(0.0, 'Quick Touchpad Toggle');
 
-        this.icon = new St.Icon({style_class: 'system-status-icon'});
-        this.schema = Gio.Settings.new('org.gnome.desktop.peripherals.touchpad');
+        this._icon = new St.Icon({style_class: 'system-status-icon'});
+        this._settings = new Gio.Settings({schema_id: 'org.gnome.desktop.peripherals.touchpad'});
 
-        switch (this.schema.get_boolean('disable-while-typing')) {
-        case true:
-            this.icon.icon_name = 'touchpad-disabled-symbolic';
-            break;
-        case false:
-            this.icon.icon_name = 'input-touchpad-symbolic';
-            break;
-        }
+        this._iconName();
 
-        this.add_child(this.icon);
+        this.add_child(this._icon);
+
+        this._settings.connect('changed::disable-while-typing', () => {
+            this._iconName();
+        });
 
         this.connect('button-release-event', () => {
-            this.schema.set_boolean('disable-while-typing', !this.schema.get_boolean('disable-while-typing'));
-            switch (this.schema.get_boolean('disable-while-typing')) {
-            case true:
-                this.icon.icon_name = 'touchpad-disabled-symbolic';
+            this._settings.set_boolean('disable-while-typing', !this._settings.get_boolean('disable-while-typing'));
+            if (this._settings.get_boolean('disable-while-typing') === true)
                 Main.notify('Touchpad disabled while typing');
-                break;
-            case false:
-                this.icon.icon_name = 'input-touchpad-symbolic';
+            else
                 Main.notify('Touchpad enabled while typing');
-                break;
-            }
         });
+    }
+
+    _iconName() {
+        switch (this._settings.get_boolean('disable-while-typing')) {
+        case true:
+            this._icon.iconName = 'touchpad-disabled-symbolic';
+            break;
+        case false:
+            this._icon.iconName = 'input-touchpad-symbolic';
+            break;
+        }
     }
 });
 
 class Extension {
     constructor(uuid) {
         this._uuid = uuid;
+        this._indicator = null;
     }
 
     enable() {
