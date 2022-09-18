@@ -62,9 +62,7 @@ class FeatureIndicator extends QuickSettings.SystemIndicator {
         this._indicator = this._addIndicator();
         this._indicator.icon_name = 'input-touchpad-symbolic';
 
-        this._settings = new Gio.Settings({
-            schema_id: 'org.gnome.desktop.peripherals.touchpad',
-        });
+        this._settings = new Gio.Settings({schema_id: 'org.gnome.desktop.peripherals.touchpad'});
 
         this._settings.bind('disable-while-typing',
             this._indicator, 'visible',
