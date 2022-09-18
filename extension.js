@@ -29,9 +29,7 @@ class FeatureToggle extends QuickSettings.QuickToggle {
             toggleMode: true,
         });
 
-        this._settings = new Gio.Settings({
-            schema_id: 'org.gnome.desktop.peripherals.touchpad',
-        });
+        this._settings = new Gio.Settings({schema_id: 'org.gnome.desktop.peripherals.touchpad'});
 
         this._settings.bind('disable-while-typing',
             this, 'checked',
