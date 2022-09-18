@@ -16,54 +16,81 @@
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-const {Gio, GObject, St} = imports.gi;
+const {Gio, GObject} = imports.gi;
 
-const Main = imports.ui.main;
-const PanelMenu = imports.ui.panelMenu;
+const QuickSettings = imports.ui.quickSettings;
+const QuickSettingsMenu = imports.ui.main.panel.statusArea.quickSettings;
 
-const Indicator = GObject.registerClass(
-class Indicator extends PanelMenu.Button {
+const FeatureToggle = GObject.registerClass(
+class FeatureToggle extends QuickSettings.QuickToggle {
     _init() {
-        super._init(0.0, _('Touchpad Indicator'));
+        super._init({
+            label: 'Touchpad',
+            toggleMode: true,
+        });
 
-        this.icon = new St.Icon({style_class: 'system-status-icon'});
-        this.schema = Gio.Settings.new('org.gnome.desktop.peripherals.touchpad');
+        this._settings = new Gio.Settings({
+            schema_id: 'org.gnome.desktop.peripherals.touchpad',
+        });
 
-        switch (this.schema.get_boolean('disable-while-typing')) {
+        this._settings.bind('disable-while-typing',
+            this, 'checked',
+            Gio.SettingsBindFlags.INVERT_BOOLEAN);
+
+        this._iconName();
+
+        this.connect('clicked', () => {
+            this._iconName();
+        });
+    }
+
+    _iconName() {
+        switch (this._settings.get_boolean('disable-while-typing')) {
         case true:
-            this.icon.icon_name = 'touchpad-disabled-symbolic';
+            this.iconName = 'touchpad-disabled-symbolic';
             break;
         case false:
-            this.icon.icon_name = 'input-touchpad-symbolic';
+            this.iconName = 'input-touchpad-symbolic';
             break;
         }
+    }
+});
 
-        this.add_child(this.icon);
+const FeatureIndicator = GObject.registerClass(
+class FeatureIndicator extends QuickSettings.SystemIndicator {
+    _init() {
+        super._init();
 
-        this.connect('button-release-event', () => {
-            this.schema.set_boolean('disable-while-typing', !this.schema.get_boolean('disable-while-typing'));
-            switch (this.schema.get_boolean('disable-while-typing')) {
-            case true:
-                this.icon.icon_name = 'touchpad-disabled-symbolic';
-                Main.notify('Touchpad disabled while typing');
-                break;
-            case false:
-                this.icon.icon_name = 'input-touchpad-symbolic';
-                Main.notify('Touchpad enabled while typing');
-                break;
-            }
+        this._indicator = this._addIndicator();
+        this._indicator.icon_name = 'input-touchpad-symbolic';
+
+        this._settings = new Gio.Settings({
+            schema_id: 'org.gnome.desktop.peripherals.touchpad',
         });
+
+        this._settings.bind('disable-while-typing',
+            this._indicator, 'visible',
+            Gio.SettingsBindFlags.INVERT_BOOLEAN);
+
+        this.quickSettingsItems.push(new FeatureToggle());
+
+        this.connect('destroy', () => {
+            this.quickSettingsItems.forEach(item => item.destroy());
+        });
+
+        QuickSettingsMenu._indicators.add_child(this);
+        QuickSettingsMenu._addItems(this.quickSettingsItems);
     }
 });
 
 class Extension {
     constructor(uuid) {
         this._uuid = uuid;
+        this._indicator = null;
     }
 
     enable() {
-        this._indicator = new Indicator();
-        Main.panel.addToStatusArea(this._uuid, this._indicator);
+        this._indicator = new FeatureIndicator();
     }
 
     disable() {
