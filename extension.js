@@ -17,6 +17,7 @@
  */
 
 const {Gio, GObject} = imports.gi;
+const {PACKAGE_VERSION} = imports.misc.config;
 
 const QuickSettings = imports.ui.quickSettings;
 const QuickSettingsMenu = imports.ui.main.panel.statusArea.quickSettings;
@@ -25,7 +26,7 @@ const FeatureToggle = GObject.registerClass(
 class FeatureToggle extends QuickSettings.QuickToggle {
     _init() {
         super._init({
-            label: 'Touchpad',
+            [Number(PACKAGE_VERSION.split('.')[0]) >= 44 ? 'title' : 'label']: 'Touchpad',
             toggleMode: true,
         });
 
