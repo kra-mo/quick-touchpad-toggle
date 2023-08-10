@@ -80,6 +80,10 @@ class FeatureIndicator extends SystemIndicator {
         panel.statusArea.quickSettings._indicators.add_child(this);
         panel.statusArea.quickSettings._addItems(this.quickSettingsItems);
 
+        for (const item of this.quickSettingsItems) {
+            panel.statusArea.quickSettings.menu._grid.set_child_below_sibling(item, panel.statusArea.quickSettings._backgroundApps.quickSettingsItems[0]);
+        }
+
     }
 });
 
