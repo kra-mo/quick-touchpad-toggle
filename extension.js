@@ -16,17 +16,19 @@
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-const {Gio, GObject} = imports.gi;
-const {PACKAGE_VERSION} = imports.misc.config;
+import Gio from 'gi://Gio';
+import GObject from 'gi://GObject';
 
-const QuickSettings = imports.ui.quickSettings;
-const QuickSettingsMenu = imports.ui.main.panel.statusArea.quickSettings;
+import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
+import {QuickToggle, SystemIndicator} from 'resource:///org/gnome/shell/ui/quickSettings.js';
+
+import {panel} from 'resource:///org/gnome/shell/ui/main.js';
 
 const FeatureToggle = GObject.registerClass(
-class FeatureToggle extends QuickSettings.QuickToggle {
+class FeatureToggle extends QuickToggle {
     _init() {
         super._init({
-            [Number(PACKAGE_VERSION.split('.')[0]) >= 44 ? 'title' : 'label']: 'Touchpad',
+            title: 'Touchpad',
             toggleMode: true,
         });
 
@@ -56,7 +58,7 @@ class FeatureToggle extends QuickSettings.QuickToggle {
 });
 
 const FeatureIndicator = GObject.registerClass(
-class FeatureIndicator extends QuickSettings.SystemIndicator {
+class FeatureIndicator extends SystemIndicator {
     _init() {
         super._init();
 
@@ -75,17 +77,13 @@ class FeatureIndicator extends QuickSettings.SystemIndicator {
             this.quickSettingsItems.forEach(item => item.destroy());
         });
 
-        QuickSettingsMenu._indicators.add_child(this);
-        QuickSettingsMenu._addItems(this.quickSettingsItems);
+        panel.statusArea.quickSettings._indicators.add_child(this);
+        panel.statusArea.quickSettings._addItems(this.quickSettingsItems);
+
     }
 });
 
-class Extension {
-    constructor(uuid) {
-        this._uuid = uuid;
-        this._indicator = null;
-    }
-
+export default class QuickTouchpadToggleExtension extends Extension {
     enable() {
         this._indicator = new FeatureIndicator();
     }
@@ -94,8 +92,4 @@ class Extension {
         this._indicator.destroy();
         this._indicator = null;
     }
-}
-
-function init(meta) {
-    return new Extension(meta.uuid);
 }

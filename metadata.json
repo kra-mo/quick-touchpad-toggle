@@ -3,10 +3,9 @@
   "description": "Toggle the \"disable touchpad while typing\" setting more easily.",
   "name": "Quick Touchpad Toggle",
   "shell-version": [
-    "43", 
-    "44"
+    "45"
   ],
   "url": "https://github.com/kra-mo/quick-touchpad-toggle/",
   "uuid": "quick-touchpad-toggle@kramo.hu",
-  "version": 7
+  "version": 8
 }
