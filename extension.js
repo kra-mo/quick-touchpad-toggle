@@ -70,29 +70,19 @@ class FeatureIndicator extends SystemIndicator {
         this._settings.bind('disable-while-typing',
             this._indicator, 'visible',
             Gio.SettingsBindFlags.INVERT_BOOLEAN);
-
-        this.quickSettingsItems.push(new FeatureToggle());
-
-        this.connect('destroy', () => {
-            this.quickSettingsItems.forEach(item => item.destroy());
-        });
-
-        panel.statusArea.quickSettings._indicators.add_child(this);
-        panel.statusArea.quickSettings._addItems(this.quickSettingsItems);
-
-        for (const item of this.quickSettingsItems) {
-            panel.statusArea.quickSettings.menu._grid.set_child_below_sibling(item, panel.statusArea.quickSettings._backgroundApps.quickSettingsItems[0]);
-        }
-
     }
 });
 
 export default class QuickTouchpadToggleExtension extends Extension {
     enable() {
-        this._indicator = new FeatureIndicator();
+        this._indicator = new FeatureIndicator(this);
+        this._indicator.quickSettingsItems.push(new FeatureToggle(this));
+
+        panel.statusArea.quickSettings.addExternalIndicator(this._indicator);
     }
 
     disable() {
+        this._indicator.quickSettingsItems.forEach(item => item.destroy());
         this._indicator.destroy();
         this._indicator = null;
     }
