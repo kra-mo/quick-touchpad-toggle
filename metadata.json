@@ -7,5 +7,8 @@
   ],
   "url": "https://github.com/kra-mo/quick-touchpad-toggle/",
   "uuid": "quick-touchpad-toggle@kramo.hu",
-  "version": 9
+  "donations": {
+    "github": "kra-mo"
+  },
+  "version": 10
 }
