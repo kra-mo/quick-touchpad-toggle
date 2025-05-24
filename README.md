@@ -1,3 +1,6 @@
+> [!IMPORTANT]
+> This repository has been archived in favor of [codeberg.org/kramo/quick-touchpad-toggle](https://codeberg.org/kramo/quick-touchpad-toggle).
+
 # Quick Touchpad Toggle
 
 A GNOME Shell Extension to more easily toggle the "disable touchpad while typing" setting.
